@@ -1,7 +1,6 @@
 <template>
   <div class="tip-payment">
     <header>
-      
       <h1>Pago de Propinas</h1>
     </header>
 
@@ -10,13 +9,13 @@
         <div class="total-tips">
           <label>Total de Propinas</label>
           <div class="amount">
-            <input type="number" v-model="totalAmount" min="0" />
+            <input type="number" v-model="totalAmount" min="0" @focus="activeField = 'totalAmount'" />
           </div>
         </div>
 
         <div class="split-tips">
           <label>¿Entre cuántos quieres dividir las Propinas?</label>
-          <input type="number" v-model="employees" min="1" />
+          <input type="number" v-model="employees" min="1" @focus="activeField = 'employees'" />
           <div class="per-person">{{ perPersonAmount }}</div>
         </div>
 
@@ -28,12 +27,13 @@
             <button :class="{ selected: selectedMethod === 'other' }" @click="selectMethod('other')">Santander 1234</button>
           </div>
         </div>
-
+      
         <div class="keypad">
           <div class="keys">
             <button v-for="key in keys" :key="key" @click="addDigit(key)">{{ key }}</button>
           </div>
         </div>
+      
 
         <div class="payments">
           <div class="payment" v-for="payment in payments" :key="payment.method">
@@ -71,6 +71,7 @@ const message = ref('')
 const success = ref(false)
 const selectedMethod = ref('')
 const receipts = ref<{ id: number, content: string }[]>([])
+const activeField = ref<'totalAmount' | 'employees'>('totalAmount')
 
 const perPersonAmount = computed(() => {
   return `$${(totalAmount.value / employees.value).toFixed(2)} por Persona`
@@ -79,7 +80,11 @@ const perPersonAmount = computed(() => {
 const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '00', 0]
 
 const addDigit = (digit: number | string) => {
-  // Implementar lógica para agregar dígitos
+  if (activeField.value === 'totalAmount') {
+    totalAmount.value = parseInt(`${totalAmount.value}${digit}`)
+  } else if (activeField.value === 'employees') {
+    employees.value = parseInt(`${employees.value}${digit}`)
+  }
 }
 
 const selectMethod = (method: string) => {
@@ -183,14 +188,14 @@ header {
   margin-right: 1rem;
   padding: 1rem;
   font-size: 1rem;
-  background-color: #f0f0f0;
+  background-color: #ff6b6b;
   border: 1px solid #ccc;
   cursor: pointer;
   border-radius: 8px;
 }
 
 .methods button.selected {
-  background-color: #ff6b6b;
+  background-color: #7a0707;
   color: white;
 }
 
