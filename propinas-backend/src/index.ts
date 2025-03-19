@@ -15,14 +15,22 @@ connectDB();
 
 // Función para generar un recibo
 const generateReceipt = (tip: any) => {
+    const employeeDetails = tip.splitDetails.map((detail: any) => `    Empleado ${detail.employee}: ${detail.amount}`).join('\n');
+    const formattedDate = new Date(tip.createdAt).toLocaleString('es-MX', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
     return `
         Recibo de Propinas
         -------------------
         Monto Total: ${tip.totalAmount}
         Método de Pago: ${tip.paymentMethod}
         Distribución:
-        ${tip.splitDetails.map((detail: any) => `Empleado ${detail.employee}: ${detail.amount}`).join('\n')}
-        Fecha: ${tip.createdAt}
+${employeeDetails}
+        Fecha: ${formattedDate}
     `;
 };
 
