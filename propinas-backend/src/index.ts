@@ -32,15 +32,29 @@ app.post('/tips', async (req, res) => {
     }
 });
 
+
 // Dividir las propinas entre empleados
-app.post('/tips/split', (req, res) => {
-    const { totalAmount, employees } = req.body;
-    if (!totalAmount || !employees || employees.length === 0) {
-        res.status(400).json({ message: 'Datos inválidos' });
+app.post('/tips/split', async (req, res) => {
+    try {
+        const { totalAmount, employees } = req.body;
+        if (!totalAmount || !employees || employees <= 0) {
+            res.status(400).json({ message: 'Datos inválidos' });
+        }
+        const amountPerEmployee = totalAmount / employees;
+        const splitDetails = Array.from({ length: employees }, (_, i) => ({
+            employee: i + 1,
+            amount: amountPerEmployee
+        }));
+
+        const tip = new Tip({ totalAmount, employees, splitDetails });
+        await tip.save();
+
+        res.json({ message: 'Propinas divididas y guardadas en la BD', splitDetails });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al guardar en la BD'});
     }
-    const amountPerEmployee = totalAmount / employees.length;
-    res.json({ message: 'Propinas divididas', amountPerEmployee });
 });
+
 
 // Procesar el pago de propinas
 app.post('/tips/pay', (req, res) => {
