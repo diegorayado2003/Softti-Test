@@ -1,7 +1,7 @@
 <template>
   <div class="tip-payment">
     <header>
-      <router-link to="/">Atrás</router-link>
+      
       <h1>Pago de Propinas</h1>
     </header>
 
@@ -9,7 +9,9 @@
       <div class="left-section">
         <div class="total-tips">
           <label>Total de Propinas</label>
-          <input type="number" v-model="totalAmount" min="0" />
+          <div class="amount">
+            <input type="number" v-model="totalAmount" min="0" />
+          </div>
         </div>
 
         <div class="split-tips">
@@ -22,8 +24,8 @@
           <label>Elige el Método de Pago</label>
           <div class="methods">
             <button :class="{ selected: selectedMethod === 'cash' }" @click="selectMethod('cash')">Efectivo</button>
-            <button :class="{ selected: selectedMethod === 'card' }" @click="selectMethod('card')">Tarjeta</button>
-            <button :class="{ selected: selectedMethod === 'other' }" @click="selectMethod('other')">Cheque</button>
+            <button :class="{ selected: selectedMethod === 'card' }" @click="selectMethod('card')">BBVA 1234</button>
+            <button :class="{ selected: selectedMethod === 'other' }" @click="selectMethod('other')">Santander 1234</button>
           </div>
         </div>
 
@@ -139,7 +141,7 @@ onMounted(() => {
   padding: 2rem;
   font-family: Arial, sans-serif;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 header {
@@ -184,6 +186,7 @@ header {
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   cursor: pointer;
+  border-radius: 8px;
 }
 
 .methods button.selected {
@@ -200,6 +203,15 @@ header {
 .keys button {
   padding: 1rem;
   font-size: 1.5rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.keys button:hover {
+  background-color: #ff4b4b;
 }
 
 .payments {
@@ -218,14 +230,15 @@ button {
   padding: 1rem;
   font-size: 1rem;
   background-color: #ff6b6b;
-  color: gray;
+  color: white;
   border: none;
   cursor: pointer;
   margin-top: 1rem;
+  border-radius: 8px;
 }
 
 button:hover {
-  background-color: #ff6b6b;
+  background-color: #ff4b4b;
 }
 
 .success {
@@ -243,5 +256,6 @@ button:hover {
   border: 1px solid #ccc;
   padding: 1rem;
   margin-bottom: 1rem;
+  border-radius: 8px;
 }
 </style>

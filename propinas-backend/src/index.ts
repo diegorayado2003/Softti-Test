@@ -17,6 +17,7 @@ connectDB();
 const generateReceipt = (tip: any) => {
     return `
         Recibo de Propinas
+        -------------------
         Monto Total: ${tip.totalAmount}
         Método de Pago: ${tip.paymentMethod}
         Distribución:
