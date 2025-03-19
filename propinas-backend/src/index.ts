@@ -13,7 +13,17 @@ app.use(express.json());
 // Conectar a MongoDB
 connectDB();
 
-
+// Función para generar un recibo
+const generateReceipt = (tip: any) => {
+    return `
+        Recibo de Propinas
+        Monto Total: ${tip.totalAmount}
+        Método de Pago: ${tip.paymentMethod}
+        Distribución:
+        ${tip.splitDetails.map((detail: any) => `Empleado ${detail.employee}: ${detail.amount}`).join('\n')}
+        Fecha: ${tip.createdAt}
+    `;
+};
 
 // Registrar el monto total de propinas
 app.post('/tips', async (req, res) => {
@@ -36,8 +46,8 @@ app.post('/tips', async (req, res) => {
 // Dividir las propinas entre empleados
 app.post('/tips/split', async (req, res) => {
     try {
-        const { totalAmount, employees } = req.body;
-        if (!totalAmount || !employees || employees <= 0) {
+        const { totalAmount, employees, paymentMethod} = req.body;
+        if (!totalAmount || !employees || employees <= 0 || !paymentMethod) {
             res.status(400).json({ message: 'Datos inválidos' });
         }
         const amountPerEmployee = totalAmount / employees;
@@ -46,7 +56,8 @@ app.post('/tips/split', async (req, res) => {
             amount: amountPerEmployee
         }));
 
-        const tip = new Tip({ totalAmount, employees, splitDetails });
+        const tip = new Tip({ totalAmount, employees, splitDetails, paymentMethod });
+        tip.receipt = generateReceipt(tip);
         await tip.save();
 
         res.json({ message: 'Propinas divididas y guardadas en la BD', splitDetails });
@@ -66,8 +77,13 @@ app.post('/tips/pay', (req, res) => {
 });
 
 // Obtener historial de transacciones
-app.get('/tips/transactions', (req, res) => {
-    res.json({ message: 'Lista de transacciones', transactions: [] });
+app.get('/tips/transactions', async (req, res) => {
+    try {
+        const transactions = await Tip.find();
+        res.json({ message: 'Lista de transacciones', transactions });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al obtener las transacciones', });
+    }
 });
 
 // Iniciar servidor

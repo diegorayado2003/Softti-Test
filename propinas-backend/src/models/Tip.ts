@@ -8,6 +8,7 @@ const TipSchema = new mongoose.Schema({
         employee: { type: Number, required: true },
         amount: { type: Number, required: true }
     }],
+    receipt: { type: String, required: false },
     createdAt: { type: Date, default: Date.now }
 });
 
