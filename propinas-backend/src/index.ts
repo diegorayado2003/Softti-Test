@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import connectDB from './database';
+import { Tip } from './models/Tip';
 
 dotenv.config();
 
@@ -8,13 +10,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Conectar a MongoDB
+connectDB();
+
+
+
 // Registrar el monto total de propinas
-app.post('/tips', (req, res) => {
-    const { totalAmount } = req.body;
-    if (!totalAmount || totalAmount <= 0) {
-        res.status(400).json({ message: 'El monto debe ser mayor a 0' });
+app.post('/tips', async (req, res) => {
+    try {
+        const { totalAmount, paymentMethod } = req.body;
+        if (!totalAmount || totalAmount <= 0 || !paymentMethod) {
+            res.status(400).json({ message: 'Datos inválidos' });
+        }
+
+        const tip = new Tip({ totalAmount, paymentMethod });
+        await tip.save();
+
+        res.status(201).json({ message: 'Propinas registradas', tip });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al guardar en la BD' });
     }
-    res.status(201).json({ message: 'Propinas registradas', totalAmount });
 });
 
 // Dividir las propinas entre empleados
