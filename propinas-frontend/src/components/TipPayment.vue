@@ -59,7 +59,7 @@
 
       <div class="right-section">
         <h2>Recibos</h2>
-        <div v-for="receipt in receipts.slice(-5).reverse()" :key="receipt.id" class="receipt">
+        <div v-for="receipt in receipts.slice(-3).reverse()" :key="receipt.id" class="receipt">
           <pre>{{ receipt.content }}</pre>
         </div>
       </div>
