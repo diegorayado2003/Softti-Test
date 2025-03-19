@@ -1,9 +1,14 @@
+<template>
+  <div>
+    <h1>Home View</h1>
+    <TipPayment />
+  </div>
+</template>
+
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import TipPayment from '../components/TipPayment.vue';
 </script>
 
-<template>
-  <main>
-    <TheWelcome />
-  </main>
-</template>
+<style scoped>
+/* Agrega estilos aquí si es necesario */
+</style>
