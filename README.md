@@ -17,7 +17,7 @@ Este proyecto consta de dos partes: un frontend desarrollado con Vue 3 y Vite, y
 
 - **Express**: Framework web para Node.js.
 - **Mongoose**: Biblioteca de modelado de datos de MongoDB para Node.js.
-- **dotenv**: Carga variables de entorno desde un archivo `.env`.
+- **dotenv**: Carga variables de entorno desde un archivo `.env` o directamente en propinas-backend\src\database.ts.
 - **cors**: Middleware para habilitar CORS (Cross-Origin Resource Sharing).
 - **Nodemon**: Herramienta que reinicia automáticamente la aplicación de Node.js cuando se detectan cambios en los archivos.
 
